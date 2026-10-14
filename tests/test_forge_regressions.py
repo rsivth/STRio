@@ -1,7 +1,7 @@
 """New in 0.1.0: cases where the Go package *forge* misreads exports.
 
 A differential comparison against forge's ``ReadGenemapper`` found these inputs on
-2026-10-14 (see docs/TEST_PROVENANCE.md). strio must keep handling each one correctly.
+2026-10-14 (see docs/TEST_PROVENANCE.md). STRio must keep handling each one correctly.
 """
 
 from __future__ import annotations

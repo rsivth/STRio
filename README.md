@@ -1,8 +1,8 @@
-# strio
+# STRio
 
 Read forensic STR typing results into one format-neutral, immutable Python data model.
 
-strio currently reads **GeneMapper genotype-table exports** (tab, semicolon or comma
+STRio currently reads **GeneMapper genotype-table exports** (tab, semicolon or comma
 separated). It is the shared input layer of [EPG-Renderer](https://github.com/rsivth/EPG-Renderer)
 and of planned statistics modules, so that every program reads an export in exactly the
 same way.
@@ -42,7 +42,7 @@ for finding in dataset.diagnostics:
 Python 3.10 or newer, no further dependencies.
 
 ```text
-pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.0"
+pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.1"
 ```
 
 The import name is `strio`; the distribution is `strio-forensic` because `strio` is

@@ -1,10 +1,10 @@
 """Legacy suite: model invariants ported from EPG-Renderer 0.15.1.
 
 Source: ``tests/test_public_api_and_models.py``, class ``ImmutableCallModelTests``
-(four of its five tests). Renderer names map to strio names as follows:
+(four of its five tests). Renderer names map to STRio names as follows:
 ``AlleleCall`` -> ``Allele``, ``MarkerCall`` -> ``Locus``, ``SampleCall`` -> ``Sample``,
 ``GeneMapperProject`` -> ``Dataset`` + ``SourceInfo``. The renderer-only fields
-``origin``, ``height_mode`` and ``export_mode`` do not exist in strio; the invalid
+``origin``, ``height_mode`` and ``export_mode`` do not exist in STRio; the invalid
 states that concern them are not ported (see docs/TEST_PROVENANCE.md).
 """
 

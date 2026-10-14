@@ -1,4 +1,4 @@
-"""Exception hierarchy for strio.
+"""Exception hierarchy for STRio.
 
 Every error raised for unreadable or invalid input derives from :class:`ParseError`,
 which itself derives from :class:`ValueError`. Callers can therefore catch one class
@@ -9,7 +9,7 @@ from __future__ import annotations
 
 
 class StrioError(ValueError):
-    """Base class of every error raised by strio."""
+    """Base class of every error raised by STRio."""
 
 
 class ParseError(StrioError):

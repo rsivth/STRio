@@ -87,7 +87,7 @@ duplicates by the reader; `Sample.locus()` reports them as ambiguous instead.
 ## Changes against EPG-Renderer 0.15.1
 
 Old behaviour is the parser `epg_renderer.parser.read_genotypes_table` of EPG-Renderer
-0.15.1. strio takes over its reading rules unchanged: for input the old parser accepts,
+0.15.1. STRio takes over its reading rules unchanged: for input the old parser accepts,
 it returns the same samples, loci, alleles, identities and warning texts, and for input
 it rejects, the same error message. This is pinned by recorded output for every fixture
 (`tests/test_legacy_golden.py`) and the ported legacy tests. During development it was
@@ -95,7 +95,7 @@ also cross-checked in 16,220 comparisons on 4,055 inputs (fixtures, the renderer
 inputs and generated variants) with 0 differences. Such checks cannot prove equality for
 every conceivable file; a difference found later is a bug.
 
-| Area | EPG-Renderer 0.15.1 | strio 0.1.0 |
+| Area | EPG-Renderer 0.15.1 | STRio 0.1.0 |
 | --- | --- | --- |
 | Uninterpreted columns | discarded | kept per row in `Locus.extra`; listed in `SourceInfo.extra_columns` |
 | Height ceiling | always 32,767 RFU | none by default; `max_height=32_767` restores it |

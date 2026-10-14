@@ -1,6 +1,6 @@
-# strio manual
+# STRio manual
 
-This manual walks through reading a GeneMapper export with strio and using the result.
+This manual walks through reading a GeneMapper export with STRio and using the result.
 Every example below is executed by the test suite (`tests/test_documentation.py`), run
 from the repository root, so the shown output is the real output of this version.
 
@@ -9,19 +9,19 @@ from the repository root, so the shown output is the real output of this version
 - [Samples, loci and alleles](#samples-loci-and-alleles)
 - [Finding a locus by any spelling](#finding-a-locus-by-any-spelling)
 - [Allele labels and their interpretation](#allele-labels-and-their-interpretation)
-- [Columns strio does not interpret](#columns-strio-does-not-interpret)
+- [Columns STRio does not interpret](#columns-strio-does-not-interpret)
 - [Diagnostics: non-fatal findings](#diagnostics-non-fatal-findings)
 - [Errors: unusable input](#errors-unusable-input)
 - [Options](#options)
 - [Reading text instead of a file](#reading-text-instead-of-a-file)
-- [What strio does not do](#what-strio-does-not-do)
+- [What STRio does not do](#what-strio-does-not-do)
 
 ## Installation
 
-strio has no dependencies outside the Python standard library (Python 3.10 or newer).
+STRio has no dependencies outside the Python standard library (Python 3.10 or newer).
 
 ```text
-pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.0"
+pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.1"
 ```
 
 The distribution is called `strio-forensic` because the name `strio` is taken on PyPI by
@@ -67,7 +67,7 @@ Measurements that the export does not contain are `None`, never `0`. All objects
 immutable; mappings are read-only views.
 
 When one Sample Name appears in several injections (for example two allelic ladders),
-strio keeps them apart if `Sample File`, `Sample ID` or `Run Name` differ, and makes the
+STRio keeps them apart if `Sample File`, `Sample ID` or `Run Name` differ, and makes the
 identifiers unique:
 
 ```pycon
@@ -114,9 +114,9 @@ conservative interpretation for comparing and sorting:
 ```
 
 A decimal comma (`9,3`) is **not** read as a microvariant: the label is classified as
-`other`, because strio does not guess.
+`other`, because STRio does not guess.
 
-## Columns strio does not interpret
+## Columns STRio does not interpret
 
 Every column that is not one of the interpreted columns above is kept per row in
 `locus.extra`, under its exported name and with surrounding whitespace removed.
@@ -217,7 +217,7 @@ True
 clipboard or a network request. It behaves exactly like `read_genemapper` except that it
 does not detect an encoding; `source` names the text in error messages.
 
-## What strio does not do
+## What STRio does not do
 
 - It does not decide which kit a sample was typed with, and it does not check alleles
   against allelic ladders. That belongs to the programs that use the data.

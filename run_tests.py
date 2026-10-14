@@ -1,20 +1,25 @@
-"""Run the complete strio test suite and print a short report.
+"""Run the complete STRio test suite and print a short report.
 
 Usage::
 
     python run_tests.py              # all tests, short report
     python run_tests.py -v           # additionally list every test
-    python run_tests.py --quality    # additionally run ruff and mypy if installed
+    python run_tests.py --quality    # additionally run ruff and mypy (required then)
 
-The report separates the legacy suite (``tests/test_legacy_*.py``: behaviour taken over
-from earlier versions or from EPG-Renderer) from the tests of the current iteration.
-Exit code: 0 = everything passed, 1 = a test or quality check failed, 2 = the suite
-could not be discovered.
+The report separates the tests taken over from EPG-Renderer (``tests/test_legacy_*.py``)
+from STRio's own tests. Quality tools are run with the same Python interpreter as this
+script (``python -m ruff`` / ``python -m mypy``), so they are found in a virtual
+environment even when it is not activated; only if the interpreter cannot import a tool,
+an executable of that name on PATH is used.
+
+Exit code: 0 = everything passed, 1 = a test or quality check failed or a requested
+quality tool is not installed, 2 = the suite could not be discovered.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import io
 import platform
 import shutil
@@ -28,6 +33,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 LEGACY_PREFIX = "test_legacy_"
+LINT_TARGETS = ("src", "tests", "run_tests.py", "tools")
+PASSED = "passed"
+FAILED = "FAILED"
+NOT_INSTALLED = "NOT INSTALLED"
+INSTALL_HINT = 'Install the development tools with: python -m pip install -e ".[dev]"'
 
 
 @dataclass
@@ -89,7 +99,7 @@ def _base_id(test: object) -> str:
     return str(owner.id()) if hasattr(owner, "id") else str(owner)
 
 
-def _first_line(text: str) -> str:
+def _last_line(text: str) -> str:
     lines = [line for line in text.strip().splitlines() if line.strip()]
     return lines[-1].strip() if lines else ""
 
@@ -113,65 +123,89 @@ def summarize(
     summary.expected_failures = len(expected)
     summary.unexpected_successes = len(unexpected)
     summary.passed = summary.total - len(failed | errored | skipped | expected | unexpected)
-    for label, entries in (("FEHLGESCHLAGEN", result.failures), ("FEHLER", result.errors)):
+    for label, entries in (("FAILED", result.failures), ("ERROR", result.errors)):
         for test, trace in entries:
-            summary.problems.append((label, str(test), _first_line(trace)))
+            summary.problems.append((label, str(test), _last_line(trace)))
     for test in result.unexpectedSuccesses:
-        summary.problems.append(("UNERWARTET BESTANDEN", str(test), ""))
+        summary.problems.append(("UNEXPECTED SUCCESS", str(test), ""))
+    for test, reason in result.skipped:
+        summary.problems.append(("SKIPPED", str(test), reason))
     return summary
+
+
+def quality_ok(quality: list[tuple[str, str]]) -> bool:
+    """Return whether every requested quality check ran and passed."""
+
+    return all(status == PASSED for _, status in quality)
 
 
 def format_report(summary: Summary, version: str, quality: list[tuple[str, str]]) -> str:
     """Return the short human-readable report."""
 
-    width = 46
+    width = 50
     lines = [
         "=" * width,
-        f"strio {version} · Python {platform.python_version()}",
+        f"STRio {version} · Python {platform.python_version()}",
         "-" * width,
-        f"Tests gesamt        {summary.total:>6}",
-        f"  Altbestand        {summary.legacy:>6}   (tests/test_legacy_*.py)",
-        f"  aktuelle Iteration{summary.current:>6}",
+        f"Tests run              {summary.total:>6}",
+        f"  taken over           {summary.legacy:>6}   (tests/test_legacy_*.py)",
+        f"  STRio's own          {summary.current:>6}",
         "-" * width,
-        f"Bestanden           {summary.passed:>6}",
-        f"Fehlgeschlagen      {summary.failed:>6}",
-        f"Fehler              {summary.errors:>6}",
-        f"Übersprungen        {summary.skipped:>6}",
+        f"Passed                 {summary.passed:>6}",
+        f"Failed                 {summary.failed:>6}",
+        f"Errors                 {summary.errors:>6}",
+        f"Skipped                {summary.skipped:>6}",
     ]
     if summary.expected_failures or summary.unexpected_successes:
-        lines.append(f"Erwartet fehlgeschl.{summary.expected_failures:>6}")
-        lines.append(f"Unerwartet bestanden{summary.unexpected_successes:>5}")
-    lines.append(f"Dauer               {summary.duration:>6.2f} s")
+        lines.append(f"Expected failures      {summary.expected_failures:>6}")
+        lines.append(f"Unexpected successes   {summary.unexpected_successes:>6}")
+    lines.append(f"Duration               {summary.duration:>6.2f} s")
     for name, status in quality:
-        lines.append(f"{name:<20}{status}")
+        lines.append(f"{name:<23}{status}")
     lines.append("-" * width)
-    quality_ok = all(status in {"bestanden", "nicht installiert"} for _, status in quality)
-    verdict = "BESTANDEN" if summary.ok and quality_ok else "NICHT BESTANDEN"
-    lines.append(f"Ergebnis: {verdict}")
+    verdict = "PASSED" if summary.ok and quality_ok(quality) else "FAILED"
+    lines.append(f"Result: {verdict}")
     lines.append("=" * width)
     for label, test, message in summary.problems:
         lines.append(f"{label}: {test}")
         if message:
             lines.append(f"    {message}")
+    if any(status == NOT_INSTALLED for _, status in quality):
+        lines.append(INSTALL_HINT)
     return "\n".join(lines)
 
 
+def tool_command(module: str) -> list[str] | None:
+    """Return the command that runs a quality tool, or ``None`` if it is not installed."""
+
+    if importlib.util.find_spec(module) is not None:
+        return [sys.executable, "-m", module]
+    executable = shutil.which(module)
+    return [executable] if executable else None
+
+
 def run_quality_checks(root: Path = ROOT) -> list[tuple[str, str]]:
-    """Run ruff and mypy when installed; return (name, status) pairs."""
+    """Run ruff and mypy; return (name, status) pairs."""
 
     checks = (
-        ("ruff check", ["ruff", "check", "src", "tests", "run_tests.py", "tools"]),
-        ("ruff format", ["ruff", "format", "--check", "src", "tests", "run_tests.py", "tools"]),
-        ("mypy", ["mypy"]),
+        ("ruff check", "ruff", ("check", *LINT_TARGETS)),
+        ("ruff format --check", "ruff", ("format", "--check", *LINT_TARGETS)),
+        ("mypy --strict", "mypy", ()),
     )
     results: list[tuple[str, str]] = []
-    for name, command in checks:
-        if shutil.which(command[0]) is None:
-            results.append((name, "nicht installiert"))
+    for name, module, arguments in checks:
+        command = tool_command(module)
+        if command is None:
+            results.append((name, NOT_INSTALLED))
             continue
-        completed = subprocess.run(command, cwd=root, capture_output=True, text=True, check=False)
-        status = "bestanden" if completed.returncode == 0 else "FEHLGESCHLAGEN"
-        results.append((name, status))
+        completed = subprocess.run(
+            [*command, *arguments],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        results.append((name, PASSED if completed.returncode == 0 else FAILED))
         if completed.returncode != 0:
             print(completed.stdout + completed.stderr, file=sys.stderr)
     return results
@@ -180,7 +214,7 @@ def run_quality_checks(root: Path = ROOT) -> list[tuple[str, str]]:
 def main(argv: list[str] | None = None) -> int:
     """Run the suite and print the report."""
 
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("-v", "--verbose", action="store_true", help="list every test")
     parser.add_argument("--quality", action="store_true", help="also run ruff and mypy")
     args = parser.parse_args(argv)
@@ -188,7 +222,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         tests = discover()
     except RuntimeError as exc:
-        print(f"Testsuite konnte nicht geladen werden: {exc}", file=sys.stderr)
+        print(f"The test suite could not be loaded: {exc}", file=sys.stderr)
         return 2
     from strio.version import __version__
 
@@ -201,8 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.verbose:
         print()
     print(format_report(summary, __version__, quality))
-    quality_ok = all(status in {"bestanden", "nicht installiert"} for _, status in quality)
-    return 0 if summary.ok and quality_ok else 1
+    return 0 if summary.ok and quality_ok(quality) else 1
 
 
 if __name__ == "__main__":

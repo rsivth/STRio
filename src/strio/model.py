@@ -159,7 +159,7 @@ class Locus:
     def indexed_extra(self, base: str, index: int) -> str:
         """Return the extra value of the numbered column ``"<base> <index>"``.
 
-        Numbered columns that strio does not interpret (for example ``Data Point 3``)
+        Numbered columns that STRio does not interpret (for example ``Data Point 3``)
         are kept in :attr:`extra` under their exported names. This helper finds one of
         them for an allele index, ignoring letter case and runs of whitespace, so
         ``locus.indexed_extra("Data Point", allele.index)`` pairs it with its allele.

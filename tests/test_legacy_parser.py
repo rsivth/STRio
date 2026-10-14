@@ -4,7 +4,7 @@ Every test keeps the input and the assertion of its original. Only the API is
 translated: ``load_project`` -> ``strio.read_genemapper``, ``project.sample(...)
 .markers[...]`` -> ``dataset.sample(...).loci[...]``, ``allele`` -> ``label``,
 ``allele_index`` -> ``index``, ``warnings`` -> ``messages`` and the renderer exception
-names -> strio exception names (see docs/TEST_PROVENANCE.md).
+names -> STRio exception names (see docs/TEST_PROVENANCE.md).
 """
 
 from __future__ import annotations

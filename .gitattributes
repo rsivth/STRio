@@ -1,2 +1,4 @@
 *.py text eol=lf
 tests/fixtures/genemapper_exports/*.txt -text
+LICENSE text eol=lf
+src/strio/py.typed -text

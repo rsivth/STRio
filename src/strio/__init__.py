@@ -1,4 +1,4 @@
-"""strio -- read forensic STR typing results into one format-neutral data model.
+"""STRio -- read forensic STR typing results into one format-neutral data model.
 
 Quick start::
 

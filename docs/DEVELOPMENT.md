@@ -25,7 +25,7 @@ python -m venv .venv
 .venv/bin/pip install -e ".[dev]"          # Windows: .venv\Scripts\pip ...
 ```
 
-strio itself has no runtime dependencies. The `dev` extra installs ruff and mypy at the
+STRio itself has no runtime dependencies. The `dev` extra installs ruff and mypy at the
 versions EPG-Renderer pins.
 
 ## Checks
@@ -37,8 +37,21 @@ python run_tests.py --quality    # tests + ruff check + ruff format --check + my
 ```
 
 `run_tests.py` works without installing the package; it puts `src/` on the path. The
-report separates the legacy suite from the current one. Exit code 0 means everything
-passed.
+report counts the tests taken over from EPG-Renderer (`tests/test_legacy_*.py`)
+separately from STRio's own tests and lists every skipped test with its reason.
+
+With `--quality`, ruff and mypy are required: they run as `python -m ruff` and
+`python -m mypy` with the interpreter that runs the script, so a virtual environment
+does not need to be activated (`.venv/bin/python run_tests.py --quality`; on Windows
+`.venv\Scripts\python run_tests.py --quality`). If the interpreter cannot import a
+tool, an executable on PATH is used; if neither exists, the tool is reported as
+`NOT INSTALLED` and the run fails.
+
+Exit code 0 means everything passed; 1 means a test or a requested check failed or a
+requested tool is missing; 2 means the suite could not be loaded.
+
+The suite is fast (well under two seconds) because it only parses small synthetic
+files; `python run_tests.py -v` lists every test that ran.
 
 ## Conventions
 

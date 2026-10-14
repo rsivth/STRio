@@ -1,6 +1,6 @@
 # Data model
 
-strio's data model is the contract between every module that uses it: the EPG-Renderer,
+STRio's data model is the contract between every module that uses it: the EPG-Renderer,
 planned statistics modules and future format readers and writers. This page describes
 it and records the design decisions behind it.
 
@@ -51,7 +51,7 @@ per row keeps the model the same for every file; `Sample.common_extra()` checks 
 "same in every row" condition explicitly when a caller needs a sample-level value.
 Numbered uninterpreted columns (`Data Point n`) are row extras too; `Locus.indexed_extra`
 pairs them with an allele. They are not attached to alleles automatically, because a
-numbered column is not necessarily allele-bound, and failing on a column strio does not
+numbered column is not necessarily allele-bound, and failing on a column STRio does not
 understand would block files that are otherwise readable.
 
 **No instrument or kit knowledge.** Height ceilings, kit panels, ladders, dye colours

@@ -1,4 +1,4 @@
-"""Shared helpers for the strio test suite (not a test module)."""
+"""Shared helpers for the STRio test suite (not a test module)."""
 
 from __future__ import annotations
 

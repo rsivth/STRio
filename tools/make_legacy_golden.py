@@ -3,7 +3,7 @@
 Provenance tool, not part of the test suite. It needs EPG-Renderer 0.15.1 importable
 (for example ``PYTHONPATH=/path/to/EPG-Renderer/src``). The resulting files in
 ``tests/golden/`` freeze the *old* behaviour; ``tests/test_legacy_golden.py`` checks that
-strio still reproduces it. Regenerate only when the old behaviour itself is meant to be
+STRio still reproduces it. Regenerate only when the old behaviour itself is meant to be
 re-recorded, and document why in CHANGELOG.md.
 
 Usage::

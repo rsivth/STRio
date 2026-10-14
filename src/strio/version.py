@@ -1,3 +1,3 @@
-"""Single source of the strio version number."""
+"""Single source of the STRio version number."""
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

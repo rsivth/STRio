@@ -1,10 +1,48 @@
 # Changelog
 
-All notable changes to strio. Versions follow `X.Y.Z` (see docs/DEVELOPMENT.md).
+All notable changes to STRio. Versions follow `X.Y.Z` (see docs/DEVELOPMENT.md).
+
+## 0.1.1 - 2026-10-14
+
+A maintenance release: the test runner is English and checks the development tools
+reliably; the documentation writes the project name as STRio. The library itself is
+unchanged.
+
+### Old behaviour
+
+- `run_tests.py` printed its report in German.
+- `run_tests.py --quality` looked for `ruff` and `mypy` only as programs on PATH. In a
+  virtual environment that was not activated, installed tools were reported as "nicht
+  installiert", and the run still ended with "BESTANDEN".
+- Skipped tests were counted but not named.
+- The documentation wrote the project name in lower case.
+
+### New behaviour
+
+- The report is in English (`Tests run`, `Passed`, `Failed`, ..., `Result: PASSED`).
+- Quality tools run as `python -m ruff` / `python -m mypy` with the interpreter that runs
+  the script; an executable on PATH is the fallback.
+- A requested quality tool that is not installed fails the run (`NOT INSTALLED`,
+  `Result: FAILED`, exit code 1) and the report says how to install it.
+- Every skipped test is listed with its reason.
+- Prose in README, documentation and code docstrings writes **STRio**; the import name
+  `strio` and the distribution name `strio-forensic` are unchanged.
+- `.gitattributes` keeps `LICENSE` with LF line endings and `py.typed` byte-exact, so a
+  Windows checkout can be compared byte for byte with the copy bundled in EPG-Renderer.
+
+### Tests
+
+- Previous suite (0.1.0): 164 tests. Run unchanged against 0.1.1, 161 pass, 1 is
+  skipped as before, and 2 tests of `tests/test_run_tests.py` fail because they assert
+  the German report and the old rule that a missing tool still passes. Both were
+  changed deliberately (docs/TEST_PROVENANCE.md, section 0.1.1).
+- New tests cover the English report, the listing of skipped tests, the interpreter-
+  based tool invocation, the PATH fallback, the failing verdict and exit code for a
+  missing tool, that every test module contributes tests, and the STRio spelling.
 
 ## 0.1.0 - 2026-10-14
 
-First version. strio takes over the GeneMapper parser of EPG-Renderer 0.15.1 as a
+First version. STRio takes over the GeneMapper parser of EPG-Renderer 0.15.1 as a
 separate package with a format-neutral data model, so that EPG-Renderer and future
 statistics modules read exports in one way.
 

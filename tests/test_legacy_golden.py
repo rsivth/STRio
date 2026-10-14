@@ -1,9 +1,9 @@
-"""Legacy suite: strio must reproduce EPG-Renderer 0.15.1's parse of every fixture.
+"""Legacy suite: STRio must reproduce EPG-Renderer 0.15.1's parse of every fixture.
 
 The JSON files in ``tests/golden/`` were recorded from EPG-Renderer 0.15.1 with
 ``tools/make_legacy_golden.py``. They freeze the old behaviour field by field: header,
 delimiter, encoding, warnings, sample identities, markers, dyes and every allele with
-height, size, area, mutation and comment. strio is read with ``max_height=32_767``,
+height, size, area, mutation and comment. STRio is read with ``max_height=32_767``,
 the renderer's ceiling.
 """
 
