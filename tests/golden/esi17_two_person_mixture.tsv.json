@@ -1,0 +1,630 @@
+{
+ "recorded_with": "EPG-Renderer 0.15.1",
+ "fixture": "esi17_two_person_mixture.tsv",
+ "header": [
+  "Sample Name",
+  "Marker",
+  "Dye",
+  "Allele 1",
+  "Height 1",
+  "Allele 2",
+  "Height 2",
+  "Allele 3",
+  "Height 3",
+  "Allele 4",
+  "Height 4"
+ ],
+ "delimiter": "\t",
+ "sample_id_column": "Sample Name",
+ "encoding": "utf-8-sig",
+ "warnings": [],
+ "samples": [
+  {
+   "id": "MIX_ESI17_2P",
+   "display_name": "MIX_ESI17_2P",
+   "sample_name": "MIX_ESI17_2P",
+   "sample_file": null,
+   "source_sample_id": null,
+   "run_name": null,
+   "loci": [
+    {
+     "marker": "Amelogenin",
+     "dye": "FL",
+     "alleles": [
+      [
+       1,
+       "X",
+       1900,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "Y",
+       1200,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D3S1358",
+     "dye": "FL",
+     "alleles": [
+      [
+       1,
+       "15",
+       1800,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "16",
+       1450,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "17",
+       820,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D19S433",
+     "dye": "FL",
+     "alleles": [
+      [
+       1,
+       "13",
+       1700,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "14",
+       1250,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "15",
+       780,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D2S1338",
+     "dye": "FL",
+     "alleles": [
+      [
+       1,
+       "19",
+       1550,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "20",
+       1320,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "23",
+       760,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       4,
+       "24",
+       700,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D22S1045",
+     "dye": "FL",
+     "alleles": [
+      [
+       1,
+       "11",
+       1500,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "15",
+       740,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "16",
+       690,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D16S539",
+     "dye": "JOE",
+     "alleles": [
+      [
+       1,
+       "9",
+       1650,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "11",
+       980,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "12",
+       900,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D18S51",
+     "dye": "JOE",
+     "alleles": [
+      [
+       1,
+       "12",
+       1750,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "14",
+       1100,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "15",
+       980,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       4,
+       "17",
+       720,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D1S1656",
+     "dye": "JOE",
+     "alleles": [
+      [
+       1,
+       "13",
+       1680,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "15",
+       940,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "16",
+       880,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D10S1248",
+     "dye": "JOE",
+     "alleles": [
+      [
+       1,
+       "13",
+       1600,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "14",
+       990,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "15",
+       870,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D2S441",
+     "dye": "JOE",
+     "alleles": [
+      [
+       1,
+       "10",
+       1400,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "11",
+       1180,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "14",
+       760,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "TH01",
+     "dye": "TMR",
+     "alleles": [
+      [
+       1,
+       "6",
+       1350,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "7",
+       920,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "9.3",
+       860,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "vWA",
+     "dye": "TMR",
+     "alleles": [
+      [
+       1,
+       "14",
+       1850,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "16",
+       1520,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "18",
+       730,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D21S11",
+     "dye": "TMR",
+     "alleles": [
+      [
+       1,
+       "29",
+       1750,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "30",
+       980,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "31",
+       900,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       4,
+       "32.2",
+       620,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D12S391",
+     "dye": "TMR",
+     "alleles": [
+      [
+       1,
+       "18",
+       1450,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "19",
+       1330,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "22",
+       650,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D8S1179",
+     "dye": "CXR",
+     "alleles": [
+      [
+       1,
+       "11",
+       1580,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "12",
+       1420,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "13",
+       810,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "FGA",
+     "dye": "CXR",
+     "alleles": [
+      [
+       1,
+       "21",
+       1500,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "23",
+       1320,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "24",
+       780,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       4,
+       "26",
+       730,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "SE33",
+     "dye": "CXR",
+     "alleles": [
+      [
+       1,
+       "16",
+       1430,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "18",
+       1250,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "29.2",
+       640,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       4,
+       "31.2",
+       590,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

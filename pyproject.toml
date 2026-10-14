@@ -1,0 +1,112 @@
+[build-system]
+requires = ["setuptools==82.0.1", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strio-forensic"
+dynamic = ["version"]
+description = "Read forensic STR typing results (GeneMapper exports) into one format-neutral data model"
+readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = []
+maintainers = [
+    {name = "rsivth"},
+]
+keywords = [
+    "forensic genetics",
+    "GeneMapper",
+    "kinship",
+    "parser",
+    "STR",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/rsivth/strio"
+Documentation = "https://github.com/rsivth/strio/blob/main/docs/MANUAL.md"
+Repository = "https://github.com/rsivth/strio"
+Issues = "https://github.com/rsivth/strio/issues"
+Changelog = "https://github.com/rsivth/strio/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+    "mypy==1.18.2",
+    "ruff==0.12.12",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "strio.version.__version__"}
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+strio = ["py.typed"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+extend-exclude = [
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "BLE",
+    "C4",
+    "D",
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I",
+    "PIE",
+    "RUF",
+    "SIM",
+    "UP",
+]
+ignore = [
+    "D105",
+    "D107",
+    "D202",
+    "D203",
+    "D213",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src/strio"]
+strict = true
+pretty = true
+show_error_codes = true
+warn_unused_ignores = true

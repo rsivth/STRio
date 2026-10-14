@@ -1,0 +1,418 @@
+{
+ "recorded_with": "EPG-Renderer 0.15.1",
+ "fixture": "ngm_showcase.tsv",
+ "header": [
+  "Sample Name",
+  "Marker",
+  "Dye",
+  "Allele 1",
+  "Size 1",
+  "Height 1",
+  "Allele 2",
+  "Size 2",
+  "Height 2",
+  "Allele 3",
+  "Size 3",
+  "Height 3"
+ ],
+ "delimiter": "\t",
+ "sample_id_column": "Sample Name",
+ "encoding": "utf-8-sig",
+ "warnings": [],
+ "samples": [
+  {
+   "id": "NGM_SHOWCASE",
+   "display_name": "NGM_SHOWCASE",
+   "sample_name": "NGM_SHOWCASE",
+   "sample_file": null,
+   "source_sample_id": null,
+   "run_name": null,
+   "loci": [
+    {
+     "marker": "D10S1248",
+     "dye": "6-FAM",
+     "alleles": [
+      [
+       1,
+       "13",
+       1180,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "15",
+       1050,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "vWA",
+     "dye": "6-FAM",
+     "alleles": [
+      [
+       1,
+       "17",
+       990,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "25",
+       870,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D16S539",
+     "dye": "6-FAM",
+     "alleles": [
+      [
+       1,
+       "11",
+       2140,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D2S1338",
+     "dye": "6-FAM",
+     "alleles": [
+      [
+       1,
+       "19",
+       820,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "24",
+       760,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "AM",
+     "dye": "VIC",
+     "alleles": [
+      [
+       1,
+       "X",
+       1310,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "Y",
+       1190,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D8S1179",
+     "dye": "VIC",
+     "alleles": [
+      [
+       1,
+       "12",
+       1120,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "14",
+       1040,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D21S11",
+     "dye": "VIC",
+     "alleles": [
+      [
+       1,
+       "OL",
+       640,
+       "181.4",
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "30",
+       930,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       3,
+       "32.2",
+       880,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D18S51",
+     "dye": "VIC",
+     "alleles": [
+      [
+       1,
+       "13",
+       810,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "17",
+       720,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D22S1045",
+     "dye": "NED",
+     "alleles": [
+      [
+       1,
+       "15",
+       1250,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "16",
+       1170,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D19S433",
+     "dye": "NED",
+     "alleles": [
+      [
+       1,
+       "13",
+       1060,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "14.2",
+       990,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "TH01",
+     "dye": "NED",
+     "alleles": [
+      [
+       1,
+       "6",
+       1210,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "9.3",
+       1130,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "FGA",
+     "dye": "NED",
+     "alleles": [
+      [
+       1,
+       "21",
+       740,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "22",
+       700,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D2S441",
+     "dye": "PET",
+     "alleles": [
+      [
+       1,
+       "11",
+       1080,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "OL",
+       560,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D3S1358",
+     "dye": "PET",
+     "alleles": [
+      [
+       1,
+       "15",
+       1150,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "18",
+       1020,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D1S1656",
+     "dye": "PET",
+     "alleles": [
+      [
+       1,
+       "12",
+       960,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "15.3",
+       910,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "marker": "D12S391",
+     "dye": "PET",
+     "alleles": [
+      [
+       1,
+       "18",
+       880,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       2,
+       "20",
+       830,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}
