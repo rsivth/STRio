@@ -56,6 +56,7 @@ Changed assertions: none. Changed inputs: none.
 | `test_diagnostics.py` | diagnostic codes, lines, precedence, `Diagnostic` invariants |
 | `test_reader_api.py` | `parse_genemapper`, `SourceInfo`, `max_height`, UTF-16, NUL, error paths |
 | `test_hardening.py` | review findings of 0.1.1 (see iteration 0.1.2) |
+| `test_second_review.py` | findings of the second review (see iteration 0.2.1) |
 | `test_strict_types_and_source.py` | strict text types and `SourceInfo`/`TableLayout` (see iteration 0.2.0) |
 | `test_reader_edge_cases.py` | reader branches the legacy suite does not reach (identity fall-backs, header errors, quoting) |
 | `test_model.py` | model behaviour beyond the legacy invariants |
@@ -126,6 +127,22 @@ but only because a frozen dataclass rejects assignments to any name; it now assi
 `source.require_table().delimiter`, the field it is meant to protect.
 
 New: `test_strict_types_and_source.py` (findings #4 and #1 of the review).
+
+## Iteration 0.2.1
+
+Previous suite: the 203 tests of 0.2.0. Run unchanged against 0.2.1: 202 passed,
+1 skipped (as before). No test was changed.
+
+New: `test_second_review.py`, one class per finding of the second external review
+(of 0.2.0, 2026-10-15):
+
+| Class | Finding |
+| --- | --- |
+| `ExtraValueDocumentationTests` | documentation called trimmed extra values "verbatim" |
+| `SizeDecimalPlacesTests` | sizes with unlimited decimal places |
+| `QuoteScanFastPathTests` | character scan also for texts without quotes (found by STRio's re-check of the review) |
+| `SingleDuplicateCheckTests` | two duplicate-name checks with different normalisations |
+| `ConversionRuleTests` | resource use undocumented; no rule against unnoticed loss in writers |
 
 ## Fixtures
 

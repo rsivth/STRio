@@ -49,7 +49,7 @@ inventing a header.
 **Exported text stays authoritative.** `Locus.marker` and `Allele.label` are exactly
 what the file says. Normalised forms (`Locus.key`, `Allele.value`) are derived alongside
 and can be recomputed; they never replace the source. A converter can therefore write
-back what it read.
+back what it read, except whitespace at the edges of cells, which every reader removes.
 
 **Missing is `None`, never `0`.** A height of `0` and an absent height mean different
 things in casework.

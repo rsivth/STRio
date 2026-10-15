@@ -63,6 +63,18 @@ files; `python run_tests.py -v` lists every test that ran.
 - Error messages name file, line and column wherever the input allows it.
 - Every manual example is executed by `tests/test_documentation.py`; keep them true.
 
+## Rules for writers
+
+STRio does not write any format yet. When the first writer is added, it must not lose
+genetically relevant information unnoticed:
+
+- every writer returns or raises a report that names every field of the dataset that
+  was not written (for example peak heights when writing genotypes, or extra columns a
+  format has no place for);
+- a writer that has to interpret data (for example peaks to genotypes) does so through
+  an explicit, documented function, never implicitly while writing;
+- tests read back what was written and compare it with the original, field by field.
+
 ## Release
 
 1. Set the version in `src/strio/version.py` (the only place).

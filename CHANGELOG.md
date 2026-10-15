@@ -2,6 +2,45 @@
 
 All notable changes to STRio. Versions follow `X.Y.Z` (see docs/DEVELOPMENT.md).
 
+## 0.2.1 - 2026-10-15
+
+Fixes the findings of a second external review (of 0.2.0). No API change; the reading
+results are unchanged except for one stricter plausibility rule.
+
+### Old behaviour
+
+- Documentation and docstrings disagreed about extra columns: some said "verbatim",
+  the manual said "surrounding whitespace removed". The code removes it, like for
+  every other value.
+- A size could have any number of decimal places up to the CSV field limit of 131,072
+  characters (`123.` followed by 5,000 digits was read).
+- Every text was scanned character by character for quote errors, also when it held no
+  quote at all; this took about 45 % of the reading time of a typical tab-separated
+  export.
+- Duplicate column names were checked twice, by two functions with different
+  normalisations.
+- Memory use and speed were not documented; nothing defined how future writers must
+  handle information they cannot write.
+
+### New behaviour
+
+- All documentation states that extra values are kept as text with surrounding
+  whitespace removed.
+- Sizes have at most 6 decimal places, counted as written (`MAX_SIZE_DECIMALS`).
+- The quote check runs only if the text contains a quote character. Results are
+  identical; reading a 3.6 MB test export takes 1.7 s instead of 3.2 s.
+- One function finds all duplicate column names with one normalisation; errors are
+  reported at the same points as before, so every message and their order are unchanged.
+- docs/GENEMAPPER.md documents memory use and speed (section "Resources");
+  docs/DEVELOPMENT.md defines "Rules for writers", among them a report of every field
+  a writer could not write.
+
+### Tests
+
+- Previous suite (0.2.0): 203 tests, all pass unchanged against 0.2.1 (1 skipped as
+  before).
+- New: `tests/test_second_review.py`.
+
 ## 0.2.0 - 2026-10-15
 
 Changes the API in two places found by the external review of 0.1.1, before a second

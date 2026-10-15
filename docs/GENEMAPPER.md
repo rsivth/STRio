@@ -48,11 +48,11 @@ different format and not yet supported.
 | `Sample Name`, `Sample File`, `Sample ID`, `Run Name` | no | sample identity (below) |
 | `Allele n` | at least one | allele label of peak `n` |
 | `Height n` | yes, unless `require_height=False` | peak height in RFU, whole number ≥ 0 |
-| `Size n` | no | fragment size in bp, plain decimal ≥ 0 (`160`, `160.5`, `160,5`); no exponent |
+| `Size n` | no | fragment size in bp, plain decimal ≥ 0 (`160`, `160.5`, `160,5`) with at most 6 decimal places; no exponent |
 | `Area n` or `Peak Area n` | no | peak area, whole number ≥ 0 |
 | `Mutation n`, `Comment n` | no | free text |
 | `Allele Display Overflow` or `ADO` | no | overflow flag (below); also kept as extra |
-| anything else | no | kept verbatim per row in `Locus.extra` |
+| anything else | no | kept per row in `Locus.extra`, as text with surrounding whitespace removed like every other value |
 
 Numbered columns are paired by their number `n`, never by position. Numbers need not be
 contiguous (`Allele 1`, `Allele 3`).
@@ -90,6 +90,15 @@ duplicates by the reader; `Sample.locus()` reports them as ambiguous instead.
 | `allele-display-overflow` | the overflow column holds anything except empty, `0`, `false`, `no`, `n`, `none` (any case) |
 | `highest-allele-column-used` | no overflow was reported, the export has at least ten allele columns and the highest one is filled in some row |
 
+## Resources
+
+The reader holds the whole file in memory: the bytes, the decoded text, every row and the
+resulting model. Peak memory is about 15 times the file size. On the development machine
+a synthetic 3.6 MB export with 1,240 samples (80,960 marker rows) took 1.7 s and 54 MB.
+A typical export of one 96-well plate is well below 1 MB. There is no size limit: STRio
+reads files the user chose, and a limit would only add a way to fail on large but valid
+exports.
+
 ## Changes against EPG-Renderer 0.15.1
 
 Old behaviour is the parser `epg_renderer.parser.read_genotypes_table` of EPG-Renderer
@@ -121,4 +130,5 @@ and deliberately tightens four further rules; the rows marked 0.1.2 below list t
 | Integers longer than 18 digits (0.1.2) | accepted (areas; heights up to the ceiling) | `NumericValueError` |
 | Digits of other scripts (0.1.2) | read as numbers (`١٢٣` → 123) | rejected; allele labels become `other` |
 | Sizes in exponent notation (0.1.2) | read (`1e2` → 100) | rejected |
+| Sizes with more than 6 decimal places (0.2.1) | read | rejected |
 | Column in numeric error messages (0.1.2) | canonical spelling (`'Area 1'` for `Peak Area 1`) | spelling of the export; long values shortened |
