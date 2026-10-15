@@ -2,6 +2,45 @@
 
 All notable changes to STRio. Versions follow `X.Y.Z` (see docs/DEVELOPMENT.md).
 
+## 0.1.2 - 2026-10-15
+
+Fixes the findings of an external code review of 0.1.1. The data model and the API are
+unchanged.
+
+### Old behaviour
+
+- A height, area or size with more than 4,300 digits raised a plain `ValueError`
+  (Python 3.11 and later) instead of `NumericValueError`. EPG-Renderer 0.15.1 had
+  rejected such values correctly; the regression came with the move to STRio.
+- Column names that differ only in spacing (`Sample Name`, `Sample  Name`) were
+  accepted, although the reader treats them as the same column; the second was
+  silently ignored.
+- Digits of other scripts were read as numbers (`١٢٣` → 123, allele `٩.٣` → 9.3), and
+  sizes in exponent notation were read (`1e2` → 100).
+- Numeric error messages named a canonical column (`'Area 1'` for `Peak Area 1`) and
+  quoted the complete value, however long.
+- `utf-8` was tried after `utf-8-sig`, which already reads UTF-8 without BOM.
+- docs/DEVELOPMENT.md asked for the verdict `BESTANDEN`, which the runner no longer
+  prints.
+
+### New behaviour
+
+- Heights, areas and the whole-number part of sizes have at most 18 digits; longer
+  values raise `NumericValueError` on every Python version. Column numbers have at most
+  six digits.
+- Column names equal ignoring case and spacing raise `DuplicateColumnError`.
+- Only ASCII digits are numbers; sizes are plain decimals (`160`, `160.5`, `160,5`).
+- Error messages name the column as spelled in the export and shorten long values.
+- The encoding list is `utf-8-sig`, `cp1252`, `latin-1` (same results as before).
+- The release step names `Result: PASSED`.
+- ruff checks cyclomatic complexity (C90, at most 12).
+
+### Tests
+
+- Previous suite (0.1.1): 173 tests, all pass unchanged against 0.1.2 (1 skipped as
+  before).
+- New: `tests/test_hardening.py`, one class per review finding.
+
 ## 0.1.1 - 2026-10-14
 
 A maintenance release: the test runner is English and checks the development tools

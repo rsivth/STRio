@@ -21,7 +21,7 @@ from the repository root, so the shown output is the real output of this version
 STRio has no dependencies outside the Python standard library (Python 3.10 or newer).
 
 ```text
-pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.1"
+pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.2"
 ```
 
 The distribution is called `strio-forensic` because the name `strio` is taken on PyPI by

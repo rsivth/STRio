@@ -42,7 +42,7 @@ for finding in dataset.diagnostics:
 Python 3.10 or newer, no further dependencies.
 
 ```text
-pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.1"
+pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.2"
 ```
 
 The import name is `strio`; the distribution is `strio-forensic` because `strio` is

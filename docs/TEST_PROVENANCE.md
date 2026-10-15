@@ -55,6 +55,7 @@ Changed assertions: none. Changed inputs: none.
 | `test_allele_values.py` | `parse_allele_label`, `AlleleValue`, `Allele.value` |
 | `test_diagnostics.py` | diagnostic codes, lines, precedence, `Diagnostic` invariants |
 | `test_reader_api.py` | `parse_genemapper`, `SourceInfo`, `max_height`, UTF-16, NUL, error paths |
+| `test_hardening.py` | review findings of 0.1.1 (see iteration 0.1.2) |
 | `test_reader_edge_cases.py` | reader branches the legacy suite does not reach (identity fall-backs, header errors, quoting) |
 | `test_model.py` | model behaviour beyond the legacy invariants |
 | `test_forge_regressions.py` | inputs the Go package *forge* misreads (found by a differential comparison on 2026-10-14) |
@@ -87,6 +88,23 @@ New tests in 0.1.1:
 | `test_run_tests.py` | `test_failing_tool_is_reported_as_failed` |
 | `test_run_tests.py` | `test_main_exit_code_is_one_when_a_requested_tool_is_missing` |
 | `test_documentation.py` | `test_prose_writes_the_project_name_as_strio_brand` |
+
+## Iteration 0.1.2
+
+Previous suite: the 173 tests of 0.1.1. Run unchanged against 0.1.2: 172 passed,
+1 skipped (as before). No test was changed.
+
+New: `test_hardening.py`, one class per finding of the external code review of 0.1.1
+(2026-10-15):
+
+| Class | Finding |
+| --- | --- |
+| `SpacingDuplicateHeaderTests` | column names equal ignoring spacing were accepted |
+| `LongIntegerTests` | values beyond 4,300 digits escaped as plain `ValueError` |
+| `SourceColumnNameTests` | messages named a canonical instead of the exported column |
+| `AsciiDigitTests` | digits of other scripts were read as numbers (found by STRio's own re-check of the review) |
+| `EncodingListTests` | redundant `utf-8` attempt |
+| `DocumentationAndLintTests` | stale verdict in DEVELOPMENT.md; complexity limit |
 
 ## Fixtures
 

@@ -32,8 +32,9 @@ different format and not yet supported.
    `trailing-empty-columns`); data in such a column is an error. Blank column names
    elsewhere are an error.
 4. Column names are compared ignoring letter case and runs of whitespace. Two columns
-   with the same name ignoring case are an error, and so are two numbered columns of the
-   same family and number (`Allele 1` and `Allele  1`).
+   whose names are equal in this comparison are an error (`Sample Name` and
+   `Sample  Name`; for numbered columns such as `Allele 1` and `Allele  1` the message
+   names the numbered family). Column numbers have at most six ASCII digits.
 5. Blank rows are skipped. A row with more non-empty fields than the header is an error;
    shorter rows are padded with empty fields.
 
@@ -47,7 +48,7 @@ different format and not yet supported.
 | `Sample Name`, `Sample File`, `Sample ID`, `Run Name` | no | sample identity (below) |
 | `Allele n` | at least one | allele label of peak `n` |
 | `Height n` | yes, unless `require_height=False` | peak height in RFU, whole number ≥ 0 |
-| `Size n` | no | fragment size in bp, decimal ≥ 0; a decimal comma is accepted |
+| `Size n` | no | fragment size in bp, plain decimal ≥ 0 (`160`, `160.5`, `160,5`); no exponent |
 | `Area n` or `Peak Area n` | no | peak area, whole number ≥ 0 |
 | `Mutation n`, `Comment n` | no | free text |
 | `Allele Display Overflow` or `ADO` | no | overflow flag (below); also kept as extra |
@@ -55,6 +56,11 @@ different format and not yet supported.
 
 Numbered columns are paired by their number `n`, never by position. Numbers need not be
 contiguous (`Allele 1`, `Allele 3`).
+
+Numbers in heights, areas and sizes use ASCII digits only; digits of other scripts
+(`١٢٣`, `１６０`) are rejected rather than converted. Heights, areas and the whole-number
+part of sizes have at most 18 digits (leading zeros and sign not counted). Error
+messages name the column as it is spelled in the export and shorten very long values.
 
 For every number `n` of a row:
 
@@ -95,6 +101,10 @@ also cross-checked in 16,220 comparisons on 4,055 inputs (fixtures, the renderer
 inputs and generated variants) with 0 differences. Such checks cannot prove equality for
 every conceivable file; a difference found later is a bug.
 
+One such difference was found in an external review of 0.1.1: values with more than
+4,300 digits raised a plain `ValueError` instead of `NumericValueError`. 0.1.2 fixes it
+and deliberately tightens four further rules; the rows marked 0.1.2 below list them.
+
 | Area | EPG-Renderer 0.15.1 | STRio 0.1.0 |
 | --- | --- | --- |
 | Uninterpreted columns | discarded | kept per row in `Locus.extra`; listed in `SourceInfo.extra_columns` |
@@ -106,4 +116,9 @@ every conceivable file; a difference found later is a bug.
 | Allele interpretation | text only | text plus derived `Allele.value` |
 | Text input | file only | also `parse_genemapper(text)` |
 | `export_mode` | part of the project | removed; it is renderer information |
-| Exception names | `GeneMapperParserError`, `MissingRequiredColumnError`, `DuplicateHeaderError`, `DuplicateMarkerError`, `NumericConversionError` | `ParseError`, `MissingColumnError`, `DuplicateColumnError`, `DuplicateLocusError`, `NumericValueError`; messages unchanged |
+| Exception names | `GeneMapperParserError`, `MissingRequiredColumnError`, `DuplicateHeaderError`, `DuplicateMarkerError`, `NumericConversionError` | `ParseError`, `MissingColumnError`, `DuplicateColumnError`, `DuplicateLocusError`, `NumericValueError`; messages unchanged except as below |
+| Names equal ignoring spacing (0.1.2) | accepted; the second column was ignored | `DuplicateColumnError` |
+| Integers longer than 18 digits (0.1.2) | accepted (areas; heights up to the ceiling) | `NumericValueError` |
+| Digits of other scripts (0.1.2) | read as numbers (`١٢٣` → 123) | rejected; allele labels become `other` |
+| Sizes in exponent notation (0.1.2) | read (`1e2` → 100) | rejected |
+| Column in numeric error messages (0.1.2) | canonical spelling (`'Area 1'` for `Peak Area 1`) | spelling of the export; long values shortened |

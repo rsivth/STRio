@@ -67,5 +67,5 @@ files; `python run_tests.py -v` lists every test that ran.
 
 1. Set the version in `src/strio/version.py` (the only place).
 2. Add the CHANGELOG.md entry with the same version and the date.
-3. `python run_tests.py --quality` must report `BESTANDEN`.
+3. `python run_tests.py --quality` must report `Result: PASSED`.
 4. Commit, tag `vX.Y.Z`, push the tag.
