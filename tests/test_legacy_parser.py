@@ -42,11 +42,11 @@ class LegacyParserTests(unittest.TestCase):
 
     def test_detects_comma_delimiter(self):
         path = self._write("Sample Name,Marker,Dye,Allele 1,Height 1\nS,D3S1358,FAM,15,100\n")
-        self.assertEqual(load(path).source.delimiter, ",")
+        self.assertEqual(load(path).source.require_table().delimiter, ",")
 
     def test_detects_semicolon_delimiter(self):
         path = self._write("Sample Name;Marker;Dye;Allele 1;Height 1\nS;D3S1358;FAM;15;100\n")
-        self.assertEqual(load(path).source.delimiter, ";")
+        self.assertEqual(load(path).source.require_table().delimiter, ";")
 
     def test_reads_utf8_bom(self):
         path = self._write(
@@ -145,7 +145,9 @@ class LegacyParserTests(unittest.TestCase):
     def test_ignores_only_empty_trailing_unnamed_columns(self):
         path = self._write("Sample Name\tMarker\tAllele 1\tHeight 1\t\nS\tTPOX\t8\t100\t\n")
         dataset = load(path)
-        self.assertEqual(dataset.source.header, ("Sample Name", "Marker", "Allele 1", "Height 1"))
+        self.assertEqual(
+            dataset.source.require_table().header, ("Sample Name", "Marker", "Allele 1", "Height 1")
+        )
         self.assertIn("Ignored 1 empty unnamed trailing column", dataset.messages[0])
 
     def test_rejects_data_in_unnamed_trailing_column(self):

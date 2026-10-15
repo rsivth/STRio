@@ -21,7 +21,7 @@ from the repository root, so the shown output is the real output of this version
 STRio has no dependencies outside the Python standard library (Python 3.10 or newer).
 
 ```text
-pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.1.2"
+pip install "strio-forensic @ git+https://github.com/rsivth/strio@v0.2.0"
 ```
 
 The distribution is called `strio-forensic` because the name `strio` is taken on PyPI by
@@ -35,10 +35,17 @@ an unrelated project; the import name is `strio`. For development, see
 >>> dataset = strio.read_genemapper("tests/fixtures/globalfiler_minimal.tsv")
 >>> dataset.sample_ids
 ('S1',)
->>> dataset.source.format, dataset.source.delimiter, dataset.source.encoding
-('genemapper-table', '\t', 'utf-8-sig')
+>>> dataset.source.format, dataset.source.encoding
+('genemapper-table', 'utf-8-sig')
+>>> dataset.source.table.delimiter
+'\t'
 
 ```
+
+`dataset.source` describes the origin of any dataset; `dataset.source.table` holds what
+only tables have (header, delimiter, sample column, extra columns). For a GeneMapper
+export it is always present; `dataset.source.require_table()` returns it with a clear
+error for sources without a table.
 
 `read_genemapper` detects the delimiter (tab, `;` or `,`) and the text encoding, and
 pairs `Allele n`, `Height n`, `Size n`, `Area n`/`Peak Area n`, `Mutation n` and
@@ -64,7 +71,8 @@ A `Dataset` holds `Sample` objects in source order; each sample holds `Locus` ob
 ```
 
 Measurements that the export does not contain are `None`, never `0`. All objects are
-immutable; mappings are read-only views.
+immutable; mappings are read-only views. Constructors accept text only as `str`:
+`strio.Allele(1, None)` raises `TypeError` instead of creating the label `"None"`.
 
 When one Sample Name appears in several injections (for example two allelic ladders),
 STRio keeps them apart if `Sample File`, `Sample ID` or `Run Name` differ, and makes the
@@ -120,7 +128,7 @@ A decimal comma (`9,3`) is **not** read as a microvariant: the label is classifi
 
 Every column that is not one of the interpreted columns above is kept per row in
 `locus.extra`, under its exported name and with surrounding whitespace removed.
-`dataset.source.extra_columns` lists these columns in header order.
+`dataset.source.table.extra_columns` lists these columns in header order.
 
 ```pycon
 >>> text = (
@@ -129,7 +137,7 @@ Every column that is not one of the interpreted columns above is kept per row in
 ...     "S\tNGM_v1\tTH01\t9.3\t800\t2410\t\n"
 ... )
 >>> extra_demo = strio.parse_genemapper(text)
->>> extra_demo.source.extra_columns
+>>> extra_demo.source.table.extra_columns
 ('Panel', 'Data Point 1', 'AE')
 >>> vwa = extra_demo.sample("S").loci["vWA"]
 >>> dict(vwa.extra)

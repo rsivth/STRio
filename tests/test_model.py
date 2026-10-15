@@ -7,11 +7,20 @@ from dataclasses import FrozenInstanceError
 from decimal import Decimal
 from pathlib import Path
 
-from strio import Allele, Dataset, Diagnostic, DiagnosticCode, Locus, Sample, SourceInfo
+from strio import (
+    Allele,
+    Dataset,
+    Diagnostic,
+    DiagnosticCode,
+    Locus,
+    Sample,
+    SourceInfo,
+    TableLayout,
+)
 
 
 def _source() -> SourceInfo:
-    return SourceInfo("test", ("Sample Name", "Marker"), "\t", "Sample Name")
+    return SourceInfo("test", table=TableLayout(("Sample Name", "Marker"), "\t", "Sample Name"))
 
 
 class AlleleModelTests(unittest.TestCase):
@@ -119,12 +128,12 @@ class DatasetModelTests(unittest.TestCase):
                 factory()
 
     def test_source_path_is_converted_and_frozen(self) -> None:
-        source = SourceInfo("f", ("A",), ",", "A", path="x/y.txt")  # type: ignore[arg-type]
+        source = SourceInfo("f", path="x/y.txt")  # type: ignore[arg-type]
         self.assertEqual(source.path, Path("x/y.txt"))
         with self.assertRaises(FrozenInstanceError):
             source.format = "other"  # type: ignore[misc]
         with self.assertRaises(ValueError):
-            SourceInfo(" ", ("A",), ",", "A")
+            SourceInfo(" ")
 
 
 if __name__ == "__main__":

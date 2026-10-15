@@ -2,6 +2,49 @@
 
 All notable changes to STRio. Versions follow `X.Y.Z` (see docs/DEVELOPMENT.md).
 
+## 0.2.0 - 2026-10-15
+
+Changes the API in two places found by the external review of 0.1.1, before a second
+reader builds on them. Reading results are unchanged.
+
+### Old behaviour
+
+- Constructors converted any value to text with `str()`: `Allele(1, None)` created the
+  label `"None"`, `Sample(123)` the id `"123"`; `size_bp` accepted floats.
+- `SourceInfo` required `header`, `delimiter` and `sample_id_column` and held
+  `extra_columns`: properties of delimited tables that a non-tabular format could only
+  fill with invented values.
+
+### New behaviour
+
+- Text fields of `Allele`, `Locus`, `Sample`, `SourceInfo`, `TableLayout` and
+  `Diagnostic`, the arguments of `marker_key` and `parse_allele_label`, and `text` and
+  `source` of `parse_genemapper` accept only `str` and raise `TypeError` otherwise
+  (bytes passed to `parse_genemapper` were read as the text `"b'...'"`). `size_bp` accepts `Decimal`, `int` or decimal
+  text, not `float`.
+- `SourceInfo(format, path=None, encoding=None, table=None)` is format-neutral. The new
+  `TableLayout(header, delimiter, sample_id_column, extra_columns=())` holds the table
+  properties and checks that the sample column and the extra columns are header
+  columns. `SourceInfo.require_table()` returns the layout or raises `ValueError`.
+
+### Migrating from 0.1.x
+
+| 0.1.x | 0.2.0 |
+| --- | --- |
+| `dataset.source.header` | `dataset.source.table.header` or `dataset.source.require_table().header` |
+| `dataset.source.delimiter` | `dataset.source.table.delimiter` |
+| `dataset.source.sample_id_column` | `dataset.source.table.sample_id_column` |
+| `dataset.source.extra_columns` | `dataset.source.table.extra_columns` |
+| `SourceInfo(fmt, header, delimiter, column, path=..., encoding=..., extra_columns=...)` | `SourceInfo(fmt, path=..., encoding=..., table=TableLayout(header, delimiter, column, extra_columns=...))` |
+
+### Tests
+
+- Previous suite (0.1.2): 189 tests. Run unchanged against 0.2.0, 172 pass, 1 is
+  skipped as before and 16 fail: 15 use the removed `SourceInfo` fields or constructor,
+  1 checks the changelog version. They were translated to the new API with unchanged
+  inputs and assertions (docs/TEST_PROVENANCE.md, section 0.2.0).
+- New: `tests/test_strict_types_and_source.py`.
+
 ## 0.1.2 - 2026-10-15
 
 Fixes the findings of an external code review of 0.1.1. The data model and the API are

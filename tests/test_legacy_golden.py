@@ -21,9 +21,9 @@ GOLDEN = ROOT / "tests" / "golden"
 
 def _snapshot(dataset: strio.Dataset) -> dict[str, object]:
     return {
-        "header": list(dataset.source.header),
-        "delimiter": dataset.source.delimiter,
-        "sample_id_column": dataset.source.sample_id_column,
+        "header": list(dataset.source.require_table().header),
+        "delimiter": dataset.source.require_table().delimiter,
+        "sample_id_column": dataset.source.require_table().sample_id_column,
         "encoding": dataset.source.encoding,
         "warnings": list(dataset.messages),
         "samples": [

@@ -22,7 +22,7 @@ class EntryPointTests(unittest.TestCase):
         from_text = strio.parse_genemapper(path.read_text(encoding="utf-8"))
         self.assertEqual(from_file.samples, from_text.samples)
         self.assertEqual(from_file.diagnostics, from_text.diagnostics)
-        self.assertEqual(from_file.source.header, from_text.source.header)
+        self.assertEqual(from_file.source.table, from_text.source.table)
 
     def test_source_information(self) -> None:
         path = write_temp(self, SIMPLE)
@@ -30,7 +30,7 @@ class EntryPointTests(unittest.TestCase):
         self.assertEqual(dataset.source.format, "genemapper-table")
         self.assertEqual(dataset.source.path, path)
         self.assertEqual(dataset.source.encoding, "utf-8-sig")
-        self.assertEqual(dataset.source.sample_id_column, "Sample Name")
+        self.assertEqual(dataset.source.require_table().sample_id_column, "Sample Name")
         text_dataset = strio.parse_genemapper(SIMPLE)
         self.assertIsNone(text_dataset.source.path)
         self.assertIsNone(text_dataset.source.encoding)

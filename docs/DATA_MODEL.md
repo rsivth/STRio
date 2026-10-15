@@ -6,7 +6,8 @@ it and records the design decisions behind it.
 
 ```text
 Dataset
-├── source: SourceInfo        format, path, encoding, delimiter, header, extra columns
+├── source: SourceInfo        format, path, encoding
+│    └── table: TableLayout   header, delimiter, sample column, extra columns (tables only)
 ├── diagnostics: (Diagnostic, ...)
 └── samples: {id: Sample}     source order
      └── loci: {marker: Locus}     source order, keyed by exported marker name
@@ -22,15 +23,28 @@ Dataset
 | `Allele` | `index`, `label`, `height`, `size_bp`, `area`, `mutation`, `comment`; derived `value` | `index` ≥ 1; non-blank `label`; `height`, `area` whole numbers ≥ 0 or `None`; `size_bp` finite `Decimal` ≥ 0 or `None`; blank text → `None` |
 | `Locus` | `marker`, `dye`, `alleles`, `extra`, `line`; derived `key` | non-blank `marker`; allele indexes unique and increasing; `extra` string → string |
 | `Sample` | `id`, `loci`, `display_name`, `sample_name`, `sample_file`, `source_sample_id`, `run_name` | non-blank `id`; mapping keys equal `Locus.marker`; no two loci equal ignoring case and whitespace; `display_name` defaults to `id` |
-| `SourceInfo` | `format`, `header`, `delimiter`, `sample_id_column`, `path`, `encoding`, `extra_columns` | non-empty header without blank names; one-character delimiter |
+| `SourceInfo` | `format`, `path`, `encoding`, `table` | non-blank `format`; `table` is a `TableLayout` or `None`; `require_table()` returns it or raises `ValueError` |
+| `TableLayout` | `header`, `delimiter`, `sample_id_column`, `extra_columns` | non-empty header without blank names; one-character delimiter; sample column and extra columns are header columns |
 | `Dataset` | `samples`, `source`, `diagnostics` | mapping keys equal `Sample.id` |
 | `AlleleValue` | `kind`, `number` | `number` only for `NUMERIC`, finite and ≥ 0 |
 | `Diagnostic` | `code`, `message`, `lines` | non-blank message; lines ≥ 1 |
 
 All types are frozen dataclasses. Constructors copy their inputs; mappings are exposed
-as read-only views. An object that exists is valid.
+as read-only views. An object that exists is valid. Text fields accept only `str`; any
+other type raises `TypeError` instead of being converted (`size_bp` also accepts a
+`Decimal` or an `int`).
 
 ## Design decisions
+
+**No silent conversion.** Until 0.1.x the constructors turned anything into text with
+`str()`, so `Allele(1, None)` produced the label `"None"`. Since 0.2.0 a wrong type is
+an error. Floats are refused for `size_bp` because binary floating point cannot hold
+values such as 160.1 exactly; pass a `Decimal` or the text.
+
+**Format-neutral provenance.** `SourceInfo` holds what every source has: format, path,
+encoding. What only tables have (header, delimiter, sample column, extra columns) lives
+in `TableLayout`. A future reader of a non-tabular format leaves `table` empty instead of
+inventing a header.
 
 **Exported text stays authoritative.** `Locus.marker` and `Allele.label` are exactly
 what the file says. Normalised forms (`Locus.key`, `Allele.value`) are derived alongside

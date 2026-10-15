@@ -16,11 +16,11 @@ from dataclasses import FrozenInstanceError
 from _support import FIXTURES
 
 import strio
-from strio import Allele, Dataset, Locus, Sample, SourceInfo
+from strio import Allele, Dataset, Locus, Sample, SourceInfo, TableLayout
 
 
 def _source(header=("Sample Name", "Marker"), delimiter="\t", column="Sample Name"):
-    return SourceInfo("test", header, delimiter, column)
+    return SourceInfo("test", table=TableLayout(header, delimiter, column))
 
 
 class LegacyImmutableModelTests(unittest.TestCase):
@@ -80,7 +80,7 @@ class LegacyImmutableModelTests(unittest.TestCase):
         with self.assertRaises(FrozenInstanceError):
             sample.id = "S2"  # type: ignore[misc]
         with self.assertRaises(FrozenInstanceError):
-            dataset.source.delimiter = ","  # type: ignore[misc]
+            dataset.source.require_table().delimiter = ","  # type: ignore[misc]
 
 
 if __name__ == "__main__":

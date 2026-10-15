@@ -46,7 +46,7 @@ class SampleIdentityEdgeTests(unittest.TestCase):
         )
         sample = dataset.sample("7")
         self.assertEqual((sample.display_name, sample.sample_name), ("7", None))
-        self.assertEqual(dataset.source.sample_id_column, "Lane")
+        self.assertEqual(dataset.source.require_table().sample_id_column, "Lane")
 
 
 class HeaderEdgeTests(unittest.TestCase):

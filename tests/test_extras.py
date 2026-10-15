@@ -25,7 +25,7 @@ class ExtraColumnTests(unittest.TestCase):
             "A1.hid\tS\tNGM_v1\tvWA\tB\t14\t16\t1100\t970\t9000\t8000\t3301\t3410\t0\t\n"
         )
         self.assertEqual(
-            dataset.source.extra_columns,
+            dataset.source.require_table().extra_columns,
             ("Panel", "Data Point 1", "Data Point 2", "Allele Display Overflow", "AE"),
         )
         locus = dataset.sample("S").loci["vWA"]
@@ -39,13 +39,13 @@ class ExtraColumnTests(unittest.TestCase):
                 "AE": "",
             },
         )
-        self.assertEqual(tuple(locus.extra), dataset.source.extra_columns)
+        self.assertEqual(tuple(locus.extra), dataset.source.require_table().extra_columns)
 
     def test_interpreted_columns_are_not_duplicated_into_extras(self) -> None:
         dataset = _parse("A1.hid\tS\tNGM_v1\tvWA\tB\t14\t16\t1100\t970\t9000\t8000\t1\t2\t0\t\n")
         interpreted = {"Sample File", "Sample Name", "Marker", "Dye", "Allele 1", "Height 1"}
         interpreted |= {"Peak Area 1", "Allele 2", "Height 2", "Peak Area 2"}
-        self.assertFalse(interpreted & set(dataset.source.extra_columns))
+        self.assertFalse(interpreted & set(dataset.source.require_table().extra_columns))
         self.assertEqual(dataset.sample("S").loci["vWA"].alleles[1].area, 8000)
 
     def test_extra_values_are_stripped_and_empty_values_kept(self) -> None:
@@ -71,7 +71,7 @@ class ExtraColumnTests(unittest.TestCase):
 
     def test_files_without_extra_columns_have_empty_extras(self) -> None:
         dataset = strio.read_genemapper(EXPORTS / "ngm_select_mixed_export.txt")
-        self.assertEqual(dataset.source.extra_columns, ())
+        self.assertEqual(dataset.source.require_table().extra_columns, ())
         self.assertTrue(
             all(
                 not locus.extra

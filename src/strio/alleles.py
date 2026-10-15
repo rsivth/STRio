@@ -99,7 +99,9 @@ def parse_allele_label(label: str) -> AlleleValue:
       scripts such as ``٩.٣`` -> ``OTHER``.
     """
 
-    text = str(label).strip()
+    if not isinstance(label, str):
+        raise TypeError(f"Allele label must be a str, not {type(label).__name__}.")
+    text = label.strip()
     match = _NUMERIC_RE.fullmatch(text)
     if match is not None:
         return AlleleValue(AlleleKind.NUMERIC, Decimal(text))

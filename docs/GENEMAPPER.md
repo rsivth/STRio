@@ -107,7 +107,7 @@ and deliberately tightens four further rules; the rows marked 0.1.2 below list t
 
 | Area | EPG-Renderer 0.15.1 | STRio 0.1.0 |
 | --- | --- | --- |
-| Uninterpreted columns | discarded | kept per row in `Locus.extra`; listed in `SourceInfo.extra_columns` |
+| Uninterpreted columns | discarded | kept per row in `Locus.extra`; listed in `TableLayout.extra_columns` (`SourceInfo.extra_columns` before 0.2.0) |
 | Height ceiling | always 32,767 RFU | none by default; `max_height=32_767` restores it |
 | Warnings | plain strings | `Diagnostic` objects with code, message and lines; `Dataset.messages` gives the strings |
 | UTF-16 with BOM | rejected ("Could not detect CSV delimiter") | read |

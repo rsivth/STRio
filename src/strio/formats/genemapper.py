@@ -10,6 +10,8 @@ schema. The reader therefore identifies columns by name, never by position:
   case- and space-insensitively;
 * every other column is kept verbatim per row in :attr:`strio.Locus.extra`.
 
+:attr:`strio.SourceInfo.table` of the result describes the header and delimiter.
+
 The reader is strict: malformed input raises a :class:`strio.ParseError` subclass that
 names the line and column. It never repairs or guesses values.
 """
@@ -31,7 +33,7 @@ from ..errors import (
     NumericValueError,
     ParseError,
 )
-from ..model import Allele, Dataset, Locus, Sample, SourceInfo, row_key
+from ..model import Allele, Dataset, Locus, Sample, SourceInfo, TableLayout, row_key
 from . import _table
 
 FORMAT_NAME = "genemapper-table"
@@ -239,9 +241,16 @@ def parse_genemapper(
     encoding is detected. ``source`` names the text in error messages.
     """
 
+    if not isinstance(text, str):
+        raise TypeError(
+            f"text must be a str, not {type(text).__name__}; decode bytes first or use "
+            "read_genemapper()."
+        )
+    if not isinstance(source, str):
+        raise TypeError(f"source must be a str, not {type(source).__name__}.")
     _check_max_height(max_height)
     options = _Options(
-        str(source),
+        source,
         None,
         sample_id_column,
         marker_column,
@@ -250,7 +259,7 @@ def parse_genemapper(
         require_height,
         max_height,
     )
-    return _read(str(text), None, options)
+    return _read(text, None, options)
 
 
 def _check_max_height(max_height: int | None) -> None:
@@ -283,12 +292,14 @@ def _read(text: str, encoding: str | None, options: _Options) -> Dataset:
         samples,
         SourceInfo(
             FORMAT_NAME,
-            layout.columns,
-            delimiter,
-            layout.sample_id_column,
             path=options.path,
             encoding=encoding,
-            extra_columns=layout.extra_columns,
+            table=TableLayout(
+                layout.columns,
+                delimiter,
+                layout.sample_id_column,
+                extra_columns=layout.extra_columns,
+            ),
         ),
         tuple(diagnostics),
     )

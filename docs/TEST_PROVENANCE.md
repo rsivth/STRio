@@ -22,7 +22,7 @@ only names are translated:
 | `SampleCall`, `.sample_id`, `.markers` | `Sample`, `.id`, `.loci` |
 | `MarkerCall` | `Locus` |
 | `AlleleCall`, `.allele_index`, `.allele` | `Allele`, `.index`, `.label` |
-| `project.warnings`, `.header`, `.delimiter` | `dataset.messages`, `.source.header`, `.source.delimiter` |
+| `project.warnings`, `.header`, `.delimiter` | `dataset.messages`, `.source.table.header`, `.source.table.delimiter` (`.source.header`, `.source.delimiter` before 0.2.0) |
 | `GeneMapperParserError`, `MissingRequiredColumnError`, `DuplicateHeaderError`, `DuplicateMarkerError`, `NumericConversionError` | `ParseError`, `MissingColumnError`, `DuplicateColumnError`, `DuplicateLocusError`, `NumericValueError` |
 
 | STRio module | Tests | Origin |
@@ -56,6 +56,7 @@ Changed assertions: none. Changed inputs: none.
 | `test_diagnostics.py` | diagnostic codes, lines, precedence, `Diagnostic` invariants |
 | `test_reader_api.py` | `parse_genemapper`, `SourceInfo`, `max_height`, UTF-16, NUL, error paths |
 | `test_hardening.py` | review findings of 0.1.1 (see iteration 0.1.2) |
+| `test_strict_types_and_source.py` | strict text types and `SourceInfo`/`TableLayout` (see iteration 0.2.0) |
 | `test_reader_edge_cases.py` | reader branches the legacy suite does not reach (identity fall-backs, header errors, quoting) |
 | `test_model.py` | model behaviour beyond the legacy invariants |
 | `test_forge_regressions.py` | inputs the Go package *forge* misreads (found by a differential comparison on 2026-10-14) |
@@ -105,6 +106,26 @@ New: `test_hardening.py`, one class per finding of the external code review of 0
 | `AsciiDigitTests` | digits of other scripts were read as numbers (found by STRio's own re-check of the review) |
 | `EncodingListTests` | redundant `utf-8` attempt |
 | `DocumentationAndLintTests` | stale verdict in DEVELOPMENT.md; complexity limit |
+
+## Iteration 0.2.0
+
+Previous suite: the 189 tests of 0.1.2. Run unchanged against 0.2.0: 172 passed,
+1 skipped (as before), 16 failed. All 16 failures are intended:
+
+- 15 tests read `dataset.source.header`, `.delimiter`, `.sample_id_column` or
+  `.extra_columns`, or built `SourceInfo` with table arguments. They were translated to
+  `dataset.source.require_table().…` and `SourceInfo(…, table=TableLayout(…))`; their
+  inputs and assertions are unchanged. Affected: `test_legacy_parser.py` (3),
+  `test_legacy_models.py` (2), `test_legacy_golden.py` (1), `test_extras.py` (3),
+  `test_model.py` (2), `test_reader_api.py` (2), `test_reader_edge_cases.py` (1) and the
+  manual example run by `test_documentation.py` (1).
+- `test_public_api.py`: the changelog check failed until the 0.2.0 entry was written.
+
+`test_legacy_models.test_loaded_dataset_is_immutable_at_every_layer` passed unchanged,
+but only because a frozen dataclass rejects assignments to any name; it now assigns to
+`source.require_table().delimiter`, the field it is meant to protect.
+
+New: `test_strict_types_and_source.py` (findings #4 and #1 of the review).
 
 ## Fixtures
 
