@@ -2,6 +2,34 @@
 
 All notable changes to STRio. Versions follow `X.Y.Z` (see docs/DEVELOPMENT.md).
 
+## 0.2.2 - 2026-10-17
+
+Fixes one reproducible finding of a third external review (of 0.2.1) and adds a test
+run over real exports that stay outside the repository. No API change.
+
+### Old behaviour
+
+- The delimiter was detected from the first physical line. A quoted column name with a
+  line break (`"Long` / `Note"`) split the header in two, and the file was rejected with
+  "Could not detect CSV delimiter", although it was read with an explicit delimiter.
+  EPG-Renderer 0.15.1 failed in the same way.
+- The only test data were the synthetic files of the suite.
+
+### New behaviour
+
+- Detection reads the first CSV record with the same rules as the rest of the file, so
+  it accepts every header that an explicit delimiter accepts. Files without a line
+  break inside a quoted header name are detected exactly as before.
+- `python run_tests.py --corpus DIR` reads every export below a local folder outside
+  the repository and reports `read`, `REJECTED` or `CRASHED` per file, with notes;
+  `--shareable` hides file names and messages. See docs/DEVELOPMENT.md, "Real exports".
+
+### Tests
+
+- Previous suite (0.2.1): 215 tests, all pass unchanged against 0.2.2 (1 skipped as
+  before).
+- New: `tests/test_multiline_header.py`, `tests/test_corpus_run.py`.
+
 ## 0.2.1 - 2026-10-15
 
 Fixes the findings of a second external review (of 0.2.0). No API change; the reading

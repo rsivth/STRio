@@ -57,6 +57,8 @@ Changed assertions: none. Changed inputs: none.
 | `test_reader_api.py` | `parse_genemapper`, `SourceInfo`, `max_height`, UTF-16, NUL, error paths |
 | `test_hardening.py` | review findings of 0.1.1 (see iteration 0.1.2) |
 | `test_second_review.py` | findings of the second review (see iteration 0.2.1) |
+| `test_multiline_header.py` | delimiter detection with a line break in a quoted header name (see iteration 0.2.2) |
+| `test_corpus_run.py` | the runner's corpus run over real exports (see iteration 0.2.2) |
 | `test_strict_types_and_source.py` | strict text types and `SourceInfo`/`TableLayout` (see iteration 0.2.0) |
 | `test_reader_edge_cases.py` | reader branches the legacy suite does not reach (identity fall-backs, header errors, quoting) |
 | `test_model.py` | model behaviour beyond the legacy invariants |
@@ -143,6 +145,21 @@ New: `test_second_review.py`, one class per finding of the second external revie
 | `QuoteScanFastPathTests` | character scan also for texts without quotes (found by STRio's re-check of the review) |
 | `SingleDuplicateCheckTests` | two duplicate-name checks with different normalisations |
 | `ConversionRuleTests` | resource use undocumented; no rule against unnoticed loss in writers |
+
+## Iteration 0.2.2
+
+Previous suite: the 215 tests of 0.2.1. Run unchanged against 0.2.2: 214 passed,
+1 skipped (as before). No test was changed.
+
+New:
+
+| Module | Covers |
+| --- | --- |
+| `test_multiline_header.py` | the reproduced finding of the third external review (of 0.2.1, 2026-10-15): detection read the first physical line, not the first record |
+| `test_corpus_run.py` | `run_tests.py --corpus`: folder rules, outcomes, notes, `--shareable`, no writes into the folder |
+
+The corpus tests build their folders in a temporary directory from inline text; they
+use no real export.
 
 ## Fixtures
 

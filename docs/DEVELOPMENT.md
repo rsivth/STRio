@@ -34,6 +34,7 @@ versions EPG-Renderer pins.
 python run_tests.py              # all tests, short report
 python run_tests.py -v           # list every test
 python run_tests.py --quality    # tests + ruff check + ruff format --check + mypy
+python run_tests.py --corpus DIR # tests + every real export in DIR (see "Real exports")
 ```
 
 `run_tests.py` works without installing the package; it puts `src/` on the path. The
@@ -47,11 +48,41 @@ does not need to be activated (`.venv/bin/python run_tests.py --quality`; on Win
 tool, an executable on PATH is used; if neither exists, the tool is reported as
 `NOT INSTALLED` and the run fails.
 
-Exit code 0 means everything passed; 1 means a test or a requested check failed or a
-requested tool is missing; 2 means the suite could not be loaded.
+Exit code 0 means everything passed; 1 means a test, a requested check or a corpus file
+failed or a requested tool is missing; 2 means the suite could not be loaded or the
+corpus folder cannot be used.
 
 The suite is fast (well under two seconds) because it only parses small synthetic
 files; `python run_tests.py -v` lists every test that ran.
+
+## Real exports
+
+The test suite uses synthetic files only. Real GeneMapper exports show what synthetic
+files miss (other software versions, kits, column settings, regional formats), but
+they hold genetic data of real persons and must never enter the repository. Keep them
+in a folder of their own outside the checkout and run:
+
+```text
+python run_tests.py --corpus ~/strio-corpus
+python run_tests.py --corpus ~/strio-corpus --shareable
+```
+
+- Every `.txt`, `.tsv` and `.csv` file below the folder is read with the defaults of
+  `read_genemapper`, the way EPG-Renderer reads a file. Hidden files and folders are
+  left out; other files are only counted.
+- A folder inside the repository is refused (exit code 2), so the exports cannot be
+  committed by accident. Nothing is written into the folder.
+- Each file ends as `read`, `REJECTED` (STRio raised one of its documented errors) or
+  `CRASHED` (any other exception, always a STRio bug; the report names the code line).
+  The run passes only if every file was read, so a folder should hold only exports
+  that are expected to be valid.
+- Notes do not fail the run: diagnostics, allele labels STRio cannot classify, and a
+  file that would also be read with another delimiter (the detected one may then be
+  wrong).
+- The report shows counts, not data. It does name the files and quote error messages,
+  which can contain a sample name or a value. `--shareable` numbers the files in the
+  same order and shows only error types and line numbers; use it for any report that
+  leaves your computer.
 
 ## Conventions
 

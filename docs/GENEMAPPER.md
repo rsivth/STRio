@@ -22,9 +22,11 @@ different format and not yet supported.
 
 ## Table structure
 
-1. The delimiter is detected from the first line by recognising `Marker`, `Allele n`
+1. The delimiter is detected from the header record by recognising `Marker`, `Allele n`
    and a sample column (`Sample Name`, `Sample ID`, `Sample File`); ties go to the
-   delimiter yielding more columns. An explicit delimiter must be tab, `;` or `,`.
+   delimiter yielding more columns. The header record is read with the same CSV rules
+   as the rest of the file, so a quoted column name may contain a line break (the name
+   keeps it). An explicit delimiter must be tab, `;` or `,`.
 2. CSV quoting is validated strictly: a quote inside an unquoted field, characters after
    a closing quote and unterminated quotes raise `ParseError` with the line number.
    Quoted fields may contain line breaks; reported line numbers stay physical lines.
@@ -131,4 +133,5 @@ and deliberately tightens four further rules; the rows marked 0.1.2 below list t
 | Digits of other scripts (0.1.2) | read as numbers (`١٢٣` → 123) | rejected; allele labels become `other` |
 | Sizes in exponent notation (0.1.2) | read (`1e2` → 100) | rejected |
 | Sizes with more than 6 decimal places (0.2.1) | read | rejected |
+| Quoted column name with a line break (0.2.2) | "Could not detect CSV delimiter" | read (before 0.2.2 only with an explicit delimiter) |
 | Column in numeric error messages (0.1.2) | canonical spelling (`'Area 1'` for `Peak Area 1`) | spelling of the export; long values shortened |
