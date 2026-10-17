@@ -204,11 +204,15 @@ class CorpusFolderError(Exception):
 def corpus_files(folder: Path, root: Path = ROOT) -> tuple[list[Path], int]:
     """Return the export files below ``folder`` in name order and the number of others.
 
-    Hidden files and folders are left out. A folder inside the repository is refused so
-    that real exports cannot be committed by accident.
+    The paths lie below ``folder`` as given, also when it is reached through a symbolic
+    link (on macOS, temporary folders under ``/var`` are links to ``/private/var``).
+    Hidden files and folders are left out. A folder that is, or resolves to, a place
+    inside the repository is refused so that real exports cannot be committed by
+    accident.
     """
 
-    resolved = folder.expanduser().resolve()
+    base = folder.expanduser()
+    resolved = base.resolve()
     if not resolved.is_dir():
         raise CorpusFolderError(f"Corpus folder does not exist: {folder}")
     if resolved.is_relative_to(root.resolve()):
@@ -217,8 +221,8 @@ def corpus_files(folder: Path, root: Path = ROOT) -> tuple[list[Path], int]:
         )
     exports: list[Path] = []
     others = 0
-    for path in sorted(resolved.rglob("*")):
-        relative = path.relative_to(resolved)
+    for path in sorted(base.rglob("*")):
+        relative = path.relative_to(base)
         if any(part.startswith(".") for part in relative.parts) or not path.is_file():
             continue
         if path.suffix.casefold() in CORPUS_SUFFIXES:
@@ -336,7 +340,7 @@ def run_corpus(folder: Path, shareable: bool = False, root: Path = ROOT) -> Corp
     exports, others = corpus_files(folder, root)
     result = CorpusResult(folder, other_files=others, shareable=shareable)
     start = time.perf_counter()
-    base = folder.expanduser().resolve()
+    base = folder.expanduser()
     for number, path in enumerate(exports, start=1):
         name = f"file {number}" if shareable else path.relative_to(base).as_posix()
         result.files.append(check_corpus_file(path, name, shareable))

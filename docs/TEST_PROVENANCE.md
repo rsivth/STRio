@@ -156,7 +156,7 @@ New:
 | Module | Covers |
 | --- | --- |
 | `test_multiline_header.py` | the reproduced finding of the third external review (of 0.2.1, 2026-10-15): detection read the first physical line, not the first record |
-| `test_corpus_run.py` | `run_tests.py --corpus`: folder rules, outcomes, notes, `--shareable`, no writes into the folder |
+| `test_corpus_run.py` | `run_tests.py --corpus`: folder rules (also through symbolic links, as macOS uses for temporary folders), outcomes, notes, `--shareable`, no writes into the folder |
 
 The corpus tests build their folders in a temporary directory from inline text; they
 use no real export.

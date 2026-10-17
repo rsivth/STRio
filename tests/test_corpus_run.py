@@ -95,6 +95,28 @@ class CorpusFolderTests(unittest.TestCase):
         self.assertEqual(names, ["a/c.csv", "a/run.TSV", "b.txt"])
         self.assertEqual(others, 1)
 
+    def test_a_folder_reached_through_a_symbolic_link_keeps_its_given_path(self) -> None:
+        # macOS: tempfile folders under /var are links to /private/var.
+        folder = _Folder({"a/c.csv": GOOD, "b.txt": GOOD})
+        self.addCleanup(folder.close)
+        with tempfile.TemporaryDirectory() as directory:
+            link = Path(directory) / "corpus-link"
+            link.symlink_to(folder.path, target_is_directory=True)
+            exports, _ = runner.corpus_files(link)
+            self.assertEqual(
+                [path.relative_to(link).as_posix() for path in exports], ["a/c.csv", "b.txt"]
+            )
+            result = runner.run_corpus(link)
+        self.assertEqual([item.name for item in result.files], ["a/c.csv", "b.txt"])
+        self.assertTrue(result.ok)
+
+    def test_a_link_from_outside_into_the_repository_is_refused(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            link = Path(directory) / "looks-outside"
+            link.symlink_to(ROOT / "tests" / "fixtures", target_is_directory=True)
+            with self.assertRaisesRegex(runner.CorpusFolderError, "inside the repository"):
+                runner.corpus_files(link)
+
     def test_shareable_needs_a_corpus(self) -> None:
         with (
             mock.patch("sys.stderr", new_callable=io.StringIO),
